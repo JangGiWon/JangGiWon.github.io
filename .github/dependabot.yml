@@ -3,7 +3,11 @@ updates:
   - package-ecosystem: "bundler"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
   - package-ecosystem: "npm"
     directory: "/"
     versioning-strategy: increase
@@ -14,7 +18,11 @@ updates:
           - "minor"
           - "patch"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
   - package-ecosystem: "github-actions"
     directory: "/"
     groups:
@@ -22,4 +30,9 @@ updates:
         update-types:
           - "major"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
+    
