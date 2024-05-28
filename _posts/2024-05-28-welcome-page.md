@@ -1,14 +1,14 @@
 ---
 title: Welcome to the Notebook
-date: 2024-05-28 20:34:00 +0530
+date: 2024-05-28 20:34:00 +0800
 categories: [Blogging, Tutorial]
 tags: [writing]
-author: shamith_watchdogs
+author: cotes
+pin: true
 img_path: "/assets/img/welcome-page/"
 image:
   path: "welcome-img.jpg"
   alt: "Welcome Page"
-pin: true
 ---
 
 Are you a tech enthusiast looking to expand your knowledge, or perhaps an experienced developer eager to share your expertise with the world? Notebook is the perfect place for you!
