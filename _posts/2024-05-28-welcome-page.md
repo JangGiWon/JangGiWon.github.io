@@ -5,8 +5,9 @@ categories: [Blogging, Tutorial]
 tags: [writing]
 author: cotes
 pin: true
+img_path: "/assets/img/welcome-page/"
 image:
-  path: "/assets/img/welcome-page/welcome-img.jpg"
+  path: "welcome-img.jpg"
   alt: "Welcome Page"
 ---
 
