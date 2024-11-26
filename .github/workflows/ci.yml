@@ -38,7 +38,7 @@ jobs:
           node-version: latest
 
       - name: Build Assets
-        run: npm i && npm run build
+        run: bundle install
 
       - name: Test Site
-        run: bash tools/test
+        run: bundle exec rake test
