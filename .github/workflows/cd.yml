@@ -1,37 +1,73 @@
-name: CD
+name: "Continuous Deployment"
 
 on:
   push:
     branches:
-      - production
-    tags-ignore:
-      - "**"
+      - master
+    paths-ignore:
+      - .gitignore
+      - README.md
+      - LICENSE
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  release:
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: ruby/setup-ruby@v1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          ruby-version: 3.3
+          fetch-depth: 0
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2" # Updated to the latest stable version
           bundler-cache: true
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: latest
+      - name: Install Dependencies
+        run: bundle install
 
-      - run: npm install
-      - run: npx semantic-release
+      - name: Build Site
+        run: bundle exec jekyll build -d "_site${{ steps.pages.outputs.base_path }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GEM_HOST_API_KEY: ${{ secrets.GEM_HOST_API_KEY }}
+          JEKYLL_ENV: "production"
 
-  publish:
-    needs: release
-    uses: ./.github/workflows/publish.yml
+      - name: Test Site
+        run: |
+          bundle exec htmlproofer _site \
+            --disable-external \
+            --ignore-urls "/^http:\/\/127\.0\.0\.1/,/^http:\/\/0\.0\.0\.0/,/^http:\/\/localhost/"
+
+      - name: Upload Site Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "_site${{ steps.pages.outputs.base_path }}"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -32,13 +32,15 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: latest
-
-      - name: Build Assets
+      - name: Install Dependencies
         run: bundle install
 
-      - name: Test Site
+      - name: Build Site
         run: bundle exec jekyll build
+        env:
+          JEKYLL_ENV: "production"
+
+      - name: Test Site
+        run: bundle exec htmlproofer _site \
+          --disable-external \
+          --ignore-urls "/^http:\/\/127\.0\.0\.1/,/^http:\/\/0\.0\.0\.0/,/^http:\/\/localhost/"
